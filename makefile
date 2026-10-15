@@ -1,0 +1,2 @@
+all:
+	java Draw.java

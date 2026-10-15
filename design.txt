@@ -1,0 +1,8 @@
+klasser:
+Geom: ett geometriskt object och dess specifikationer, en abstrakt klass
+Oval: en oval, ärver Geom.
+Rect: en rektangel, ärver geom.
+Model: en modell som håller en lista Geom samt implementerar spara och ladda.
+View: en JPanel som målar upp model i Swing, håller en referens till model.
+Controller: en MouseAdapter som modifierar model och view, håller en referens till vardera.
+Draw: implementerar main-funktionen som koordinerar Model, View, Controller samt en JFrame
