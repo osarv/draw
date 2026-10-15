@@ -30,35 +30,38 @@ class Controller extends MouseAdapter {
     }
 
     private int[] getRgb(Color color) {
+        int[] rgb = null;
         switch(color) {
-            case Color.RED: return new rgb[] {255, 0, 0};
-            case Color.BLACK: return new rgb[] {255, 255, 255};
-            case Color.BLUE: return new rgb[] {0, 0, 255};
+            case Color.RED: rgb = new int[] {255, 0, 0};
+            case Color.BLACK: rgb = new int[] {255, 255, 255};
+            case Color.BLUE: rgb = new int[] {0, 0, 255};
         }
+        return rgb;
     }
 
     private Geom createGeom() {
-        Geom g;
+        Geom g = null;
         int x = Integer.min(pressedX, movedX);
         int y = Integer.min(pressedY, movedY);
         int width = Math.abs(pressedX - movedX);
         int height = Math.abs(pressedY - movedY);
+        int[] rgb = getRgb(color);
         switch (shape) {
-            case Shape.RECT: g = Rect(x, y, width, height, rgb);
-            case Shape.OVAL: g = Oval(x, y, width, height);
+            case Shape.RECT: g = new Rect(x, y, width, height, rgb);
+            case Shape.OVAL: g = new Oval(x, y, width, height, rgb);
         }
         return g;
     }
     
     @Override
     public void mousePressed(MouseEvent e) {
-        PressedX = e.getX();
-        PressedY = e.getY();
+        pressedX = e.getX();
+        pressedY = e.getY();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        PushGeom(createGeom());
+        model.PushGeom(createGeom());
         view.repaint();
     }
 
@@ -75,7 +78,7 @@ class Controller extends MouseAdapter {
         if (!pressed) return;
         movedX = e.getX();
         movedY = e.getY();
-        PushGeom(createGeom());
-        PopGeom();
+        model.PushGeom(createGeom());
+        model.PopGeom();
     }
 }
