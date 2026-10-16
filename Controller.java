@@ -1,23 +1,11 @@
 import javax.swing.*;
 import java.awt.event.*;
-
-enum Color {
-    RED,
-    BLACK,
-    BLUE
-};
-
-enum Shape {
-    RECT,
-    OVAL
-};
+import java.awt.Color;
 
 class Controller extends MouseAdapter {
     Model model;
     View view;
 
-    Color color;
-    Shape shape;
     private boolean pressed;
     private int pressedX;
     private int pressedY;
@@ -27,16 +15,9 @@ class Controller extends MouseAdapter {
     Controller(Model model, View view) {
         this.model = model;
         this.view = view;
-    }
-
-    private int[] getRgb(Color color) {
-        int[] rgb = null;
-        switch(color) {
-            case Color.RED: rgb = new int[] {255, 0, 0};
-            case Color.BLACK: rgb = new int[] {255, 255, 255};
-            case Color.BLUE: rgb = new int[] {0, 0, 255};
-        }
-        return rgb;
+        view.blueButton.addActionListener(p -> model.SetColor(Color.BLUE));
+        view.redButton.addActionListener(p -> model.SetColor(Color.RED));
+        view.blackButton.addActionListener(p -> model.SetColor(Color.BLACK));
     }
 
     private Geom createGeom() {
@@ -45,40 +26,24 @@ class Controller extends MouseAdapter {
         int y = Integer.min(pressedY, movedY);
         int width = Math.abs(pressedX - movedX);
         int height = Math.abs(pressedY - movedY);
-        int[] rgb = getRgb(color);
-        switch (shape) {
-            case Shape.RECT: g = new Rect(x, y, width, height, rgb);
-            case Shape.OVAL: g = new Oval(x, y, width, height, rgb);
-        }
-        return g;
+        return new Geom(x, y, width, height, model.GetShape(), model.GetColor());
     }
     
     @Override
     public void mousePressed(MouseEvent e) {
         pressedX = e.getX();
         pressedY = e.getY();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
+        if (model.GetShape() == Shape.POINT) {
+            model.PushGeom(new Geom(pressedX -5, pressedY - 5, 10, 10, Shape.POINT, model.GetColor()));
+        }
         model.PushGeom(createGeom());
-        view.repaint();
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        if (!pressed) return;
+    public void mouseDragged(MouseEvent e) {
         movedX = e.getX();
         movedY = e.getY();
-        model.PushGeom(createGeom());
-        model.PopGeom();
+        model.UpdateLastGeom(createGeom());
+        view.repaint();
     }
 }

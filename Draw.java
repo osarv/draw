@@ -8,11 +8,12 @@ class Draw {
         View view = new View(mdl);
         Controller ctrlr = new Controller(mdl, view);
         view.addMouseListener(ctrlr);
+        view.addMouseMotionListener(ctrlr);
         frame.add(view);
 
-        frame.setSize(400, 400);
+        frame.setSize(1000, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
+        frame.repaint();
     }
 }

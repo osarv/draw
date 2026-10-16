@@ -1,14 +1,19 @@
-abstract class Geom {
-    private int x;
-    private int y;
-    private int height;
-    private int width;
-    private int[] rgb = new int[3];
+import java.awt.Color;
 
-    Geom(int x, int y, int width, int height, int[] rgb) {
+class Geom {
+    public final int x;
+    public final int y;
+    public final int height;
+    public final int width;
+    public final Color color;
+    public final Shape shape;
+
+    Geom(int x, int y, int width, int height, Shape shape, Color color) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.shape = shape;
+        this.color = color;
     }
 }
